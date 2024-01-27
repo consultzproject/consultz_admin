@@ -2,10 +2,6 @@ import React from "react";
 import * as Mui from "@mui/material";
 import * as Pages from "src/app/pages";
 import * as Components from "src/app/components";
-import * as Formik from "formik";
-import * as Hooks from "src/app/hooks";
-import * as Api from "src/api";
-import * as Providers from "src/app/providers";
 import * as Router from "react-router-dom";
 import axios from "axios";
 import * as Constants from "src/constants";
@@ -17,35 +13,25 @@ export const Main = () => {
   const [filter, setFilter] = React.useState(["All"]);
 
   const fetchData = async () => {
+    setLoading(true);
     const url = Constants.API_CONFIG.baseURL + Routes?.userList?.url;
-    const data = { designation:filter};
-  
+
     try {
-      const response = await axios.request({
-        method: 'GET',
-        url: url,
-        data: data, // Request body data
+      const response = await axios.get(url, {
         headers: {
           'Content-Type': 'application/json',
         },
+        params: { designation: filter.includes("All") ? "" : filter },
       });
-  
-      console.log(response.data,"check response");
+
+      console.log(response.data, "check response");
+      setList(response?.data?.data);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
+      setLoading(false);
     }
   };
-  
-
-  // const fetchData = () => {
-  //   setLoading(true);
-  //   axios
-  //     .get(Constants.API_CONFIG.baseURL + Routes?.userList?.url,{designation:filter})
-  //     .then((response) => {
-  //       setList(response?.data?.data);
-  //       setLoading(false);
-  //     });
-  // };
 
   React.useEffect(() => {
     fetchData();
@@ -57,12 +43,13 @@ export const Main = () => {
         {loading ? (
           <Components.Temp.Loader />
         ) : (
-          <Pages.Dashboard.Table
-            list={list}
-           
-            filter={filter}
-            setFilter={setFilter}
-          />
+          filter.length > 0 && (
+            <Pages.Dashboard.Table
+              list={list}
+              filter={filter}
+              setFilter={setFilter}
+            />
+          )
         )}
       </Mui.Box>
       <Router.Outlet />

@@ -5,8 +5,10 @@ import * as MuiIcons from "@mui/icons-material";
 import * as Components from "src/app/components";
 import * as Hooks from "src/app/hooks";
 
-export const Table = ({ list, setFilter, filter }) => {
-  const filters = ["Front End Developer", "Full Stack Developer", "All"];
+export const Table = ({ list, setFilter, filter, fetchData }) => {
+  const [personName, setPersonName] = React.useState([]);
+
+  const filters = ["Front End Developer", "FullStack Developer", "All"];
 
   const ItemsPerPage = 10;
 
@@ -15,11 +17,6 @@ export const Table = ({ list, setFilter, filter }) => {
       target: { value },
     } = event;
     setPersonName(typeof value === "string" ? value.split(",") : value);
-
-    // setFilterSearch({
-    //   ...filterSearch,
-    //   filter: typeof value === "string" ? value.split(",") : value,
-    // });
   };
   const handleFilter = (e) => {
     console.log(personName, "check");
@@ -81,8 +78,14 @@ export const Table = ({ list, setFilter, filter }) => {
           direction="row"
           justifyContent="space-between"
         >
-          <Mui.Stack direction="row" spacing={2}>
-            <Mui.Select onChange={(e)=>setFilter(e.target.value)}>
+          <Mui.Stack direction="row" spacing={2} mb={2}>
+            <Mui.Select
+              value={filter}
+              onChange={(e) => {
+                setFilter(e.target.value);
+                fetchData();
+              }}
+            >
               {filters.map((item) => (
                 <Mui.MenuItem value={item}>{item}</Mui.MenuItem>
               ))}
@@ -100,9 +103,9 @@ export const Table = ({ list, setFilter, filter }) => {
               "Designation",
               "Action",
             ]}
-            // count={userList?.totalCount?.totalCount || 0}
-            // pageNo={page}
-            // setPageNo={handlePageNo}
+          // count={userList?.totalCount?.totalCount || 0}
+          // pageNo={page}
+          // setPageNo={handlePageNo}
           />
         </Mui.Stack>
       </Components.Global.Container>
