@@ -1,0 +1,40 @@
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+@keyframes mymove {
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.hide-border input {
+  border: none;
+  width: 1.5rem !important;
+  padding: 5px;
+  border-radius: 4px;
+  margin-right: 10px !important;
+}
+
+.change-bg input {
+  background-color: #f4f4f4;
+}

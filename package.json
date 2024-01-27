@@ -1,0 +1,43 @@
+{
+  "name": "admin",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:dev": "vite build --mode development && npm run preview",
+    "deploy:dev": "scp -r dist/* root@139.59.70.80:/var/www/html/my_english_friend_admin/",
+    "homepage": "https://app.myenglishfriend.in/admin/"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@material-ui/pickers": "^3.3.10",
+    "@mui/icons-material": "^5.10.14",
+    "@mui/lab": "^5.0.0-alpha.108",
+    "@mui/material": "^5.10.14",
+    "axios": "^1.6.7",
+    "firebase": "^9.14.0",
+    "formik": "^2.2.9",
+    "moment": "^2.29.4",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-csv": "^2.2.2",
+    "react-dom": "^18.2.0",
+    "react-iframe": "^1.8.5",
+    "react-otp-input-rc-17": "^2.4.1-minor",
+    "react-player": "^2.11.0",
+    "react-query": "^3.39.2",
+    "react-router-dom": "^6.4.3",
+    "socket.io-client": "^3.1.2",
+    "video-react": "^0.16.0",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "@vitejs/plugin-react": "^2.2.0",
+    "vite": "^3.2.3"
+  }
+}
