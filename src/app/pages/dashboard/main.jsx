@@ -10,7 +10,12 @@ import { Routes } from "../../../api/server/request-routes";
 export const Main = () => {
   const [list, setList] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [filter, setFilter] = React.useState(["All"]);
+  const [designation, setDesignation] = React.useState(["All"]);
+  const [location, setLocation] = React.useState(["All"]);
+  const [fromDate, setFromDate]  = React.useState("");
+  const [toDate, setToDate]  = React.useState("");
+
+
 
   const fetchData = async () => {
     setLoading(true);
@@ -21,7 +26,7 @@ export const Main = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        params: { designation: filter.includes("All") ? "" : filter },
+        params: { designation: designation.includes("All") ? "" : designation,location:location.includes("All") ?"" : location,fromDate:fromDate,toDate:toDate},
       });
 
       console.log(response.data, "check response");
@@ -35,7 +40,7 @@ export const Main = () => {
 
   React.useEffect(() => {
     fetchData();
-  }, [filter]);
+  }, [designation,location,toDate]);
 
   return (
     <>
@@ -43,11 +48,18 @@ export const Main = () => {
         {loading ? (
           <Components.Temp.Loader />
         ) : (
-          filter.length > 0 && (
+          designation.length > 0  && (
             <Pages.Dashboard.Table
               list={list}
-              filter={filter}
-              setFilter={setFilter}
+              designation={designation}
+              setDesignation={setDesignation}
+              location={location}
+              setLocation={setLocation}
+              fromDate={fromDate}
+              setFromDate={setFromDate}
+              toDate={toDate}
+              setToDate={setToDate}
+
             />
           )
         )}

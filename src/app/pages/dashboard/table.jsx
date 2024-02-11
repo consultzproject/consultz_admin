@@ -3,26 +3,16 @@ import * as Mui from "@mui/material";
 import * as Router from "react-router-dom";
 import * as MuiIcons from "@mui/icons-material";
 import * as Components from "src/app/components";
-import * as Hooks from "src/app/hooks";
+import { CountryList } from "./country";
 
-export const Table = ({ list, setFilter, filter, fetchData }) => {
+export const Table = ({ list, setDesignation, designation, fetchData,location,setLocation,fromDate,setFromDate,toDate,setToDate }) => {
   const [personName, setPersonName] = React.useState([]);
 
-  const filters = ["Front End Developer", "FullStack Developer", "All"];
+  const Technology = ["Java", "Dot Net", "Testing","Sap","Business Analyst","Share Point","Others","All"];
 
   const ItemsPerPage = 10;
 
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(typeof value === "string" ? value.split(",") : value);
-  };
-  const handleFilter = (e) => {
-    console.log(personName, "check");
-    setSearch({ filter: personName });
-    setPage(1);
-  };
+
   const downloadFile = async (url) => {
     const parsedUrl = new URL(url);
     const pathname = parsedUrl.pathname;
@@ -52,13 +42,24 @@ export const Table = ({ list, setFilter, filter, fetchData }) => {
 
   const data = list?.map((text, index) => {
     const startIndex = (1 - 1) * ItemsPerPage;
+    const dateParts = text.createdDate.split('-');
+  const year = dateParts[0];
+  const month = dateParts[1];
+  const day = dateParts[2];
     return {
       id: text.id,
       Id: startIndex + index + 1,
       name: text.name,
       email: text.email,
       mobile: text.mobile,
-      designation: text.designation,
+      technology: text.designation,
+      location: text.location,
+      // updated:`${new Date(text.updatedAt).toLocaleDateString('en-GB', {
+      //   day: '2-digit',
+      //   month: '2-digit',
+      //   year: 'numeric',
+      // })}`,
+      updated:`${day}-${month}-${year}`,
 
       Action: (
         <Mui.IconButton>
@@ -79,18 +80,90 @@ export const Table = ({ list, setFilter, filter, fetchData }) => {
           justifyContent="space-between"
         >
           <Mui.Stack direction="row" spacing={2} mb={2}>
+          <Mui.FormControl sx={{ m: 1, minWidth: 200 }}>
+                  <Mui.InputLabel id="demo-simple-select-helper-label">
+                    Technology
+                  </Mui.InputLabel>
+
             <Mui.Select
-              value={filter}
+              value={designation}
+              label="Technology"
               onChange={(e) => {
-                setFilter(e.target.value);
+                setDesignation(e.target.value);
                 fetchData();
               }}
             >
-              {filters.map((item) => (
+              {Technology.map((item) => (
                 <Mui.MenuItem value={item}>{item}</Mui.MenuItem>
               ))}
             </Mui.Select>
+     
+            </Mui.FormControl>
+            <Mui.Stack direction="row" spacing={2} mb={2}>
+          <Mui.FormControl sx={{ m: 1, minWidth: 200 }}>
+                  <Mui.InputLabel id="demo-simple-select-helper-label">
+                    Location
+                  </Mui.InputLabel>
+
+            <Mui.Select
+              value={location}
+              label="Location"
+              onChange={(e) => {
+                setLocation(e.target.value);
+                fetchData();
+              }}
+            >
+              {CountryList.map((item) => (
+                <Mui.MenuItem value={item?.name}>{item?.name}</Mui.MenuItem>
+              ))}
+            </Mui.Select>
+     
+            </Mui.FormControl>
+          
           </Mui.Stack>
+          <Mui.Stack direction="row" spacing={2} mb={2}>
+          <Mui.FormControl sx={{ m: 1, minWidth: 200 }}>
+                
+<Mui.TextField  id="date"
+      label="From"
+      type="date"
+      value={fromDate}
+      onChange={(e) => {
+        setFromDate(e.target.value);
+        fetchData();
+      }}
+  
+      InputLabelProps={{
+        shrink: true,
+      }}></Mui.TextField>
+           
+     
+            </Mui.FormControl>
+          
+          </Mui.Stack>
+          <Mui.Stack direction="row" spacing={2} mb={2}>
+          <Mui.FormControl sx={{ m: 1, minWidth: 200 }}>
+                
+<Mui.TextField  id="date"
+      label="To"
+      type="date"
+      value={toDate}
+      onChange={(e) => {
+        setToDate(e.target.value);
+        fetchData();
+      }}
+  
+      InputLabelProps={{
+        shrink: true,
+      }}></Mui.TextField>
+           
+     
+            </Mui.FormControl>
+          
+          </Mui.Stack>
+          
+          </Mui.Stack>
+        
         </Mui.Stack>
         <Mui.Stack sx={{ td: { padding: 1 } }}>
           <Components.Global.ResponsiveTable
@@ -100,7 +173,9 @@ export const Table = ({ list, setFilter, filter, fetchData }) => {
               "Name",
               "Email",
               "Mobile",
-              "Designation",
+              "Technology",
+              "Location",
+              "Uploaded At",
               "Action",
             ]}
           // count={userList?.totalCount?.totalCount || 0}
