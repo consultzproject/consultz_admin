@@ -12,12 +12,82 @@ export const Main = () => {
         <MuiTheme.Main>
 
           <Contexts.UserProvider>
-            <Router.BrowserRouter>
+            <Router.HashRouter>
               <Routes.Main />
-            </Router.BrowserRouter>
+            </Router.HashRouter>
           </Contexts.UserProvider>
 
         </MuiTheme.Main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
       </Providers.customHandlingProvider>
     </Api.Server.Main>
   );
