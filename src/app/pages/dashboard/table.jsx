@@ -13,47 +13,40 @@ export const Table = ({ list, setDesignation, designation, fetchData,location,se
   const ItemsPerPage = 10;
 
 
-  const downloadFile = async (url) => {
-    const parsedUrl = new URL(url);
-    const pathname = parsedUrl.pathname;
-    const pathParts = pathname.split("/");
-    const filename = pathParts[pathParts.length - 1];
+  const handleDownload = async (resume) => {
+    console.log(resume,"check resume")
     try {
-      const response = await fetch(url);
+      const response = await fetch(resume);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
       const blob = await response.blob();
-
-      // Create a link element
-      const downloadLink = document.createElement("a");
-      downloadLink.href = window.URL.createObjectURL(blob);
-
-      // Set the filename for the downloaded file
-      downloadLink.download = filename; // Change the filename as needed
-
-      // Append the link to the body and trigger the download
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-
-      // Remove the link from the body
-      document.body.removeChild(downloadLink);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Logo.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     } catch (error) {
-      console.error("Error downloading file:", error);
+      console.error('Error downloading file:', error);
     }
   };
 
   const data = list?.map((text, index) => {
     const startIndex = (1 - 1) * ItemsPerPage;
-    const dateParts = text.createdDate.split('-');
-  const year = dateParts[0];
-  const month = dateParts[1];
-  const day = dateParts[2];
+    const dateParts = text?.createdDate.split('-');
+  const year = dateParts[0]||"";
+  const month = dateParts[1]||"";
+  const day = dateParts[2]||"";
     return {
-      id: text.id,
+      id: text?.id,
       Id: startIndex + index + 1,
-      name: text.name,
-      email: text.email,
-      mobile: text.mobile,
-      technology: text.designation,
-      location: text.location,
+      name: text?.name,
+      email: text?.email,
+      mobile: text?.mobile,
+      technology: text?.designation,
+      location: text?.location,
       // updated:`${new Date(text.updatedAt).toLocaleDateString('en-GB', {
       //   day: '2-digit',
       //   month: '2-digit',
@@ -64,7 +57,7 @@ export const Table = ({ list, setDesignation, designation, fetchData,location,se
       Action: (
         <Mui.IconButton>
           <MuiIcons.PictureAsPdf
-            onClick={() => downloadFile(text.resume_url)}
+            onClick={() =>handleDownload(text?.resume_url)}
           />
         </Mui.IconButton>
       ),
