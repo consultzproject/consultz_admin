@@ -11,7 +11,9 @@ export const Main = () => {
   const [list, setList] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [designation, setDesignation] = React.useState(["All"]);
-  const [location, setLocation] = React.useState(["All"]);
+  const [roles, setRoles] = React.useState(["All"]);
+  const [exp, setExp] = React.useState(["All"]);
+  const [location, setLocation] = React.useState(["Belgium"]);
   const [fromDate, setFromDate]  = React.useState("");
   const [toDate, setToDate]  = React.useState("");
 
@@ -26,7 +28,7 @@ export const Main = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        params: { designation: designation.includes("All") ? "" : designation,location:location.includes("All") ?"" : location,fromDate:fromDate,toDate:toDate},
+        params: { designation: designation.includes("All") ? "" : designation,exp:exp.includes("All") ?"" : exp,roles:roles.includes("All") ?"" : roles,location:location.includes("All") ?"" : location,fromDate:fromDate,toDate:toDate},
       });
 
       console.log(response.data, "check response");
@@ -40,7 +42,7 @@ export const Main = () => {
 
   React.useEffect(() => {
     fetchData();
-  }, [designation,location,toDate]);
+  }, [designation,location,toDate,roles,exp]);
 
   return (
     <>
@@ -54,11 +56,15 @@ export const Main = () => {
               designation={designation}
               setDesignation={setDesignation}
               location={location}
+              roles={roles}
+              setRoles={setRoles}
               setLocation={setLocation}
               fromDate={fromDate}
               setFromDate={setFromDate}
               toDate={toDate}
               setToDate={setToDate}
+              exp={exp}
+              setExp={setExp}
 
             />
           )

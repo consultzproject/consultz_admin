@@ -5,55 +5,53 @@ import * as MuiIcons from "@mui/icons-material";
 import * as Components from "src/app/components";
 import { CountryList } from "./country";
 
-export const Table = ({ list, setDesignation, designation, fetchData,location,setLocation,fromDate,setFromDate,toDate,setToDate }) => {
+export const Table = ({ list, setDesignation, designation, fetchData,roles,setRoles,location,setLocation,fromDate,setFromDate,toDate,setToDate,exp,setExp }) => {
   const [personName, setPersonName] = React.useState([]);
 
-  const Technology = ["Java", "Dot Net", "Testing","Sap","Business Analyst","Share Point","Others","All"];
+  const Technology = ["Java", "Dot Net", "Testing","Devops","Front-end","SAP","Salesforce","Python","M365/SharePoint/Powerplatform","Others","All"];
 
+  const Roles=["Developer","Tester","DevOps Engineer","Scrum Master","Product Owner","Project manager","Business Analyst","Architect","Data scientist/Analyst","Others","All"]
+  const Exp=["0-3 yrs","3-8 yrs","8-12 yrs","12-20 yrs","20+ yrs","All"]
   const ItemsPerPage = 10;
 
 
-  const downloadFile = async (url) => {
-    const parsedUrl = new URL(url);
-    const pathname = parsedUrl.pathname;
-    const pathParts = pathname.split("/");
-    const filename = pathParts[pathParts.length - 1];
+  const handleDownload = async (resume) => {
+    console.log(resume,"check resume")
     try {
-      const response = await fetch(url);
+      const filename = resume.substring(resume.lastIndexOf('/') + 1);
+      const response = await fetch(resume);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
       const blob = await response.blob();
-
-      // Create a link element
-      const downloadLink = document.createElement("a");
-      downloadLink.href = window.URL.createObjectURL(blob);
-
-      // Set the filename for the downloaded file
-      downloadLink.download = filename; // Change the filename as needed
-
-      // Append the link to the body and trigger the download
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-
-      // Remove the link from the body
-      document.body.removeChild(downloadLink);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     } catch (error) {
-      console.error("Error downloading file:", error);
+      console.error('Error downloading file:', error);
     }
   };
 
   const data = list?.map((text, index) => {
     const startIndex = (1 - 1) * ItemsPerPage;
-    const dateParts = text.createdDate.split('-');
-  const year = dateParts[0];
-  const month = dateParts[1];
-  const day = dateParts[2];
+    const dateParts = text?.createdDate.split('-');
+  const year = dateParts[0]||"";
+  const month = dateParts[1]||"";
+  const day = dateParts[2]||"";
     return {
-      id: text.id,
+      id: text?.id,
       Id: startIndex + index + 1,
-      name: text.name,
-      email: text.email,
-      mobile: text.mobile,
-      technology: text.designation,
-      location: text.location,
+      name: text?.name,
+      email: text?.email,
+      mobile: text?.mobile,
+      technology: text?.designation,
+      exp: text?.exp,
+      roles: text?.roles,
+      location: text?.location,
       // updated:`${new Date(text.updatedAt).toLocaleDateString('en-GB', {
       //   day: '2-digit',
       //   month: '2-digit',
@@ -64,7 +62,7 @@ export const Table = ({ list, setDesignation, designation, fetchData,location,se
       Action: (
         <Mui.IconButton>
           <MuiIcons.PictureAsPdf
-            onClick={() => downloadFile(text.resume_url)}
+            onClick={() =>handleDownload(text?.resume_url)}
           />
         </Mui.IconButton>
       ),
@@ -80,7 +78,7 @@ export const Table = ({ list, setDesignation, designation, fetchData,location,se
           justifyContent="space-between"
         >
           <Mui.Stack direction="row" spacing={2} mb={2}>
-          <Mui.FormControl sx={{ m: 1, minWidth: 200 }}>
+          <Mui.FormControl sx={{ m: 1, minWidth: 150 }}>
                   <Mui.InputLabel id="demo-simple-select-helper-label">
                     Technology
                   </Mui.InputLabel>
@@ -100,7 +98,51 @@ export const Table = ({ list, setDesignation, designation, fetchData,location,se
      
             </Mui.FormControl>
             <Mui.Stack direction="row" spacing={2} mb={2}>
-          <Mui.FormControl sx={{ m: 1, minWidth: 200 }}>
+          <Mui.FormControl sx={{ m: 1, minWidth: 150 }}>
+                  <Mui.InputLabel id="demo-simple-select-helper-label">
+                    Exp.
+                  </Mui.InputLabel>
+
+            <Mui.Select
+              value={exp}
+              label="Exp."
+              onChange={(e) => {
+                setExp(e.target.value);
+                fetchData();
+              }}
+            >
+              {Exp.map((item) => (
+                <Mui.MenuItem value={item}>{item}</Mui.MenuItem>
+              ))}
+            </Mui.Select>
+     
+            </Mui.FormControl>
+          
+          </Mui.Stack>
+            <Mui.Stack direction="row" spacing={2} mb={2}>
+          <Mui.FormControl sx={{ m: 1, minWidth: 150 }}>
+                  <Mui.InputLabel id="demo-simple-select-helper-label">
+                    Roles
+                  </Mui.InputLabel>
+
+            <Mui.Select
+              value={roles}
+              label="Roles"
+              onChange={(e) => {
+                setRoles(e.target.value);
+                fetchData();
+              }}
+            >
+              {Roles.map((item) => (
+                <Mui.MenuItem value={item}>{item}</Mui.MenuItem>
+              ))}
+            </Mui.Select>
+     
+            </Mui.FormControl>
+          
+          </Mui.Stack>
+          <Mui.Stack direction="row" spacing={2} mb={2}>
+          <Mui.FormControl sx={{ m: 1, minWidth: 150 }}>
                   <Mui.InputLabel id="demo-simple-select-helper-label">
                     Location
                   </Mui.InputLabel>
@@ -122,7 +164,7 @@ export const Table = ({ list, setDesignation, designation, fetchData,location,se
           
           </Mui.Stack>
           <Mui.Stack direction="row" spacing={2} mb={2}>
-          <Mui.FormControl sx={{ m: 1, minWidth: 200 }}>
+          <Mui.FormControl sx={{ m: 1, minWidth: 150 }}>
                 
 <Mui.TextField  id="date"
       label="From"
@@ -142,7 +184,7 @@ export const Table = ({ list, setDesignation, designation, fetchData,location,se
           
           </Mui.Stack>
           <Mui.Stack direction="row" spacing={2} mb={2}>
-          <Mui.FormControl sx={{ m: 1, minWidth: 200 }}>
+          <Mui.FormControl sx={{ m: 1, minWidth: 150 }}>
                 
 <Mui.TextField  id="date"
       label="To"
@@ -174,6 +216,8 @@ export const Table = ({ list, setDesignation, designation, fetchData,location,se
               "Email",
               "Mobile",
               "Technology",
+              "Experience",
+              "Roles",
               "Location",
               "Uploaded At",
               "Action",
