@@ -18,10 +18,7 @@ export const Table = ({ list, setDesignation, designation, fetchData,roles,setRo
   const handleDownload = async (resume) => {
     console.log(resume,"check resume")
     try {
-<<<<<<< HEAD
       const filename = resume.substring(resume.lastIndexOf('/') + 1);
-=======
->>>>>>> 49b81c222462ebb7f591106c13a03c7ea7ca374d
       const response = await fetch(resume);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -30,11 +27,7 @@ export const Table = ({ list, setDesignation, designation, fetchData,roles,setRo
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-<<<<<<< HEAD
       a.download = filename;
-=======
-      a.download = 'Logo.pdf';
->>>>>>> 49b81c222462ebb7f591106c13a03c7ea7ca374d
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
